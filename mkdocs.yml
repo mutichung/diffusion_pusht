@@ -1,4 +1,5 @@
 site_name: Diffusion PushT
+repo_url: https://github.com/mutichung/diffusion_pusht
 theme:
   name: material
   palette:
@@ -31,6 +32,25 @@ plugins:
   - blog:
       blog_dir: logs
       post_date_format: full
+  - search
 
 markdown_extensions:
   - footnotes
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js

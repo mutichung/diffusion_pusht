@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 date: 2025-08-06
 ---
 
@@ -49,10 +49,42 @@ At some point I came up with the idea that I should also check the dataset relea
 
 ### `real-stanford/diffusion_policy`
 
-Naturally, the next step is to discover the diffusion policy paper and code.
+Naturally, the next step is to discover the diffusion policy paper and code. Their README suggests running the notebook in colab, but I failed to open it due to some issues. I then turned to the example commands in the README.
+
+I started with the low-dimension setup. Using the exact configuration from the paper, my results (0.944@750 and 0.948@950) seemed to match the authors' checkpoints. However, this is entirely based on the name of the checkpoint. Further investigation is required to determine whether this is a successful reproduction.
+
+## WIP
+
+- Reproducing both image and low-dimension experiments.
+- Naively training on custom v1 dataset with only swapping the dataset itself.
+
+## TODO
+
+Focus on `real-stanford/diffusion_policy`.
+
+- Look into colab notebooks.
+- Training understanding
+    - Policy input/output.
+    - How is a diffusion model trained?
+    - Hyperparameters.
+- Evaluation understanding:
+    - How do validation and test work?
+    - Definition of metrics: success rate, reward.
+- PushT environment: compare it to `lerobot/gym-pusht`.
+- Data preprocessing
+    - How image and low-dimension tasks utilize data.
+    - Convert to lerobot-style dataset?
+- Setup local `wandb`?
+- Code cleanup and commit.
 
 ## Random Notes
 
 ### AttributeError: 'Space' object has no attribute 'add_collision_handler'
 
 Looks like `pymunk` removed the method after version 7.0. Running `uv add 'pymunk<7'` solves the issue.
+
+### Environment Preparation for `diffusion_policy`
+
+Setting up the environment wasn't the easiest. This is a two-year-old project. Huggingface libraries have been moving fast and not afraid of breaking things. Python's dependency management via `conda` and `pip` isn't the best[^1]. All three factors lead to hours of fixing module/attribute not found errors and nonexistence of valid version combinations. Eventually, I had a fragile but working environment. Time for running some code!
+
+[^1]: Let's hope for [uv](https://docs.astral.sh/uv/)!
