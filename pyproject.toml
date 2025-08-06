@@ -6,7 +6,11 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "gym-pusht>=0.1.5",
+    "ipykernel>=6.30.1",
     "lerobot>=0.3.2",
+    "matplotlib>=3.10.5",
+    "pymunk<7.0",
+    "rich>=14.1.0",
     "torch>=2.7.1",
     "zarr>=3.1.1",
 ]
