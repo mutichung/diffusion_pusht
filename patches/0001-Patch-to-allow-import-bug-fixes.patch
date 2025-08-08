@@ -1,0 +1,151 @@
+From 53e340fd6dd79568e3af1f5dd0b8d99ce7c7f395 Mon Sep 17 00:00:00 2001
+From: Muti Chung <mtchung037@gmail.com>
+Date: Fri, 8 Aug 2025 10:00:31 +0800
+Subject: [PATCH] Patch to allow import; bug fixes.
+
+---
+ diffusion_policy/__init__.py                     |  0
+ diffusion_policy/codecs/__init__.py              |  0
+ diffusion_policy/common/__init__.py              |  0
+ diffusion_policy/dataset/__init__.py             |  0
+ diffusion_policy/env/__init__.py                 |  0
+ diffusion_policy/env_runner/__init__.py          |  0
+ diffusion_policy/gym_util/__init__.py            |  0
+ diffusion_policy/model/__init__.py               |  0
+ diffusion_policy/model/common/__init__.py        |  0
+ diffusion_policy/model/diffusion/__init__.py     |  0
+ diffusion_policy/model/vision/__init__.py        |  0
+ diffusion_policy/policy/__init__.py              |  0
+ diffusion_policy/shared_memory/__init__.py       |  0
+ diffusion_policy/workspace/__init__.py           |  0
+ ...ain_diffusion_transformer_lowdim_workspace.py | 16 ++++++++--------
+ 15 files changed, 8 insertions(+), 8 deletions(-)
+ create mode 100644 diffusion_policy/__init__.py
+ create mode 100644 diffusion_policy/codecs/__init__.py
+ create mode 100644 diffusion_policy/common/__init__.py
+ create mode 100644 diffusion_policy/dataset/__init__.py
+ create mode 100644 diffusion_policy/env/__init__.py
+ create mode 100644 diffusion_policy/env_runner/__init__.py
+ create mode 100644 diffusion_policy/gym_util/__init__.py
+ create mode 100644 diffusion_policy/model/__init__.py
+ create mode 100644 diffusion_policy/model/common/__init__.py
+ create mode 100644 diffusion_policy/model/diffusion/__init__.py
+ create mode 100644 diffusion_policy/model/vision/__init__.py
+ create mode 100644 diffusion_policy/policy/__init__.py
+ create mode 100644 diffusion_policy/shared_memory/__init__.py
+ create mode 100644 diffusion_policy/workspace/__init__.py
+
+diff --git a/diffusion_policy/__init__.py b/diffusion_policy/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/codecs/__init__.py b/diffusion_policy/codecs/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/common/__init__.py b/diffusion_policy/common/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/dataset/__init__.py b/diffusion_policy/dataset/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/env/__init__.py b/diffusion_policy/env/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/env_runner/__init__.py b/diffusion_policy/env_runner/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/gym_util/__init__.py b/diffusion_policy/gym_util/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/model/__init__.py b/diffusion_policy/model/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/model/common/__init__.py b/diffusion_policy/model/common/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/model/diffusion/__init__.py b/diffusion_policy/model/diffusion/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/model/vision/__init__.py b/diffusion_policy/model/vision/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/policy/__init__.py b/diffusion_policy/policy/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/shared_memory/__init__.py b/diffusion_policy/shared_memory/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/workspace/__init__.py b/diffusion_policy/workspace/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/diffusion_policy/workspace/train_diffusion_transformer_lowdim_workspace.py b/diffusion_policy/workspace/train_diffusion_transformer_lowdim_workspace.py
+index cbfa54b..2f83cbf 100644
+--- a/diffusion_policy/workspace/train_diffusion_transformer_lowdim_workspace.py
++++ b/diffusion_policy/workspace/train_diffusion_transformer_lowdim_workspace.py
+@@ -36,8 +36,8 @@ OmegaConf.register_new_resolver("eval", eval, replace=True)
+ class TrainDiffusionTransformerLowdimWorkspace(BaseWorkspace):
+     include_keys = ['global_step', 'epoch']
+ 
+-    def __init__(self, cfg: OmegaConf):
+-        super().__init__(cfg)
++    def __init__(self, cfg: OmegaConf, output_dir=None):
++        super().__init__(cfg, output_dir=output_dir)
+ 
+         # set seed
+         seed = cfg.training.seed
+@@ -155,7 +155,7 @@ class TrainDiffusionTransformerLowdimWorkspace(BaseWorkspace):
+                 step_log = dict()
+                 # ========= train for this epoch ==========
+                 train_losses = list()
+-                with tqdm.tqdm(train_dataloader, desc=f"Training epoch {self.epoch}", 
++                with tqdm.tqdm(train_dataloader, desc=f"Training epoch {self.epoch}",
+                         leave=False, mininterval=cfg.training.tqdm_interval_sec) as tepoch:
+                     for batch_idx, batch in enumerate(tepoch):
+                         # device transfer
+@@ -221,7 +221,7 @@ class TrainDiffusionTransformerLowdimWorkspace(BaseWorkspace):
+                 if (self.epoch % cfg.training.val_every) == 0:
+                     with torch.no_grad():
+                         val_losses = list()
+-                        with tqdm.tqdm(val_dataloader, desc=f"Validation epoch {self.epoch}", 
++                        with tqdm.tqdm(val_dataloader, desc=f"Validation epoch {self.epoch}",
+                                 leave=False, mininterval=cfg.training.tqdm_interval_sec) as tepoch:
+                             for batch_idx, batch in enumerate(tepoch):
+                                 batch = dict_apply(batch, lambda x: x.to(device, non_blocking=True))
+@@ -234,7 +234,7 @@ class TrainDiffusionTransformerLowdimWorkspace(BaseWorkspace):
+                             val_loss = torch.mean(torch.tensor(val_losses)).item()
+                             # log epoch average validation loss
+                             step_log['val_loss'] = val_loss
+-            
++
+                 # run diffusion sampling on a training batch
+                 if (self.epoch % cfg.training.sample_every) == 0:
+                     with torch.no_grad():
+@@ -242,7 +242,7 @@ class TrainDiffusionTransformerLowdimWorkspace(BaseWorkspace):
+                         batch = dict_apply(train_sampling_batch, lambda x: x.to(device, non_blocking=True))
+                         obs_dict = {'obs': batch['obs']}
+                         gt_action = batch['action']
+-                        
++
+                         result = policy.predict_action(obs_dict)
+                         if cfg.pred_action_steps_only:
+                             pred_action = result['action']
+@@ -273,7 +273,7 @@ class TrainDiffusionTransformerLowdimWorkspace(BaseWorkspace):
+                     for key, value in step_log.items():
+                         new_key = key.replace('/', '_')
+                         metric_dict[new_key] = value
+-                    
++
+                     # We can't copy the last checkpoint here
+                     # since save_checkpoint uses threads.
+                     # therefore at this point the file might have been empty!
+@@ -293,7 +293,7 @@ class TrainDiffusionTransformerLowdimWorkspace(BaseWorkspace):
+ 
+ @hydra.main(
+     version_base=None,
+-    config_path=str(pathlib.Path(__file__).parent.parent.joinpath("config")), 
++    config_path=str(pathlib.Path(__file__).parent.parent.joinpath("config")),
+     config_name=pathlib.Path(__file__).stem)
+ def main(cfg):
+     workspace = TrainDiffusionTransformerLowdimWorkspace(cfg)
+-- 
+2.34.1
+
