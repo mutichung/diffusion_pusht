@@ -19,4 +19,6 @@ python $dp_dir/train.py \
     training.device=cuda:0 \
     hydra.run.dir='data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}' \
     task.dataset.zarr_path=$repo_dir/data/pusht/pusht_cchi_v1.zarr \
-    name=train_dp_cnn_img_v1 training.lr_scheduler=constant training.num_epochs=1000
+    name=train_dp_cnn_img_v1 training.num_epochs=3000 \
+    checkpoint.topk.k=10 \
+    checkpoint.topk.monitor_key=epoch
