@@ -26,6 +26,7 @@ theme:
         name: Switch to system preference
 
   features:
+    - content.code.copy
     - navigation.tabs
     - navigation.indexes
 
@@ -34,6 +35,7 @@ plugins:
       blog_dir: logs
       post_date_format: full
   - search
+  - mkdocs-jupyter
 
 markdown_extensions:
   - footnotes
@@ -60,5 +62,9 @@ nav:
   - Home:
     - Welcome: index.md
     - setup.md
+  - Experiments:
+    - experiments/setup.md
+    - experiments/results.md
+    - experiments/data_analysis.ipynb
   - Logs:
     - logs/index.md
