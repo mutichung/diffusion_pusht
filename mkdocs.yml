@@ -30,6 +30,8 @@ theme:
     - navigation.tabs
     - navigation.indexes
 
+  logo: assets/logo.png
+
 plugins:
   - blog:
       blog_dir: logs
@@ -62,9 +64,14 @@ nav:
   - Home:
     - Welcome: index.md
     - setup.md
+  - Methodology:
+    - methodology/diffusion.md
+    - methodology/model_architecture.md
   - Experiments:
     - experiments/setup.md
-    - experiments/results.md
     - experiments/data_analysis.ipynb
+    - Results & Analysis: experiments/results.md
   - Logs:
     - logs/index.md
+
+copyright: Logo by YANDI RS from <a href="https://thenounproject.com/browse/icons/term/robotic-arm/" target="_blank" title="Robotic arm Icons">Noun Project</a> (CC BY 3.0)
