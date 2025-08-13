@@ -68,7 +68,7 @@ nav:
     - methodology/diffusion.md
     - methodology/model_architecture.md
   - Experiments:
-    - experiments/setup.md
+    - experiments/training.md
     - experiments/data_analysis.ipynb
     - experiments/evaluation.md
   - Logs:
