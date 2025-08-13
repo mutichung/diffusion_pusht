@@ -14,7 +14,7 @@ date: 2025-08-11
 
 ## TODO
 
-- Traiing
+- Training
     - Compare results between CNN and transformer-based policy models.
     - Plot training curves from json log.
     - Analyze training results. Compare with original paper.
