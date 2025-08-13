@@ -64,9 +64,6 @@ nav:
   - Home:
     - Welcome: index.md
     - setup.md
-  - Methodology:
-    - methodology/diffusion.md
-    - methodology/model_architecture.md
   - Experiments:
     - experiments/training.md
     - experiments/data_analysis.ipynb
@@ -74,4 +71,4 @@ nav:
   - Logs:
     - logs/index.md
 
-copyright: Logo by YANDI RS from <a href="https://thenounproject.com/browse/icons/term/robotic-arm/" target="_blank" title="Robotic arm Icons">Noun Project</a> (CC BY 3.0)
+copyright: Logo by Bernd Lakenbrink from <a href="https://thenounproject.com/browse/icons/term/robotic-arm/" target="_blank" title="Robotic arm Icons">Noun Project</a> (CC BY 3.0)
