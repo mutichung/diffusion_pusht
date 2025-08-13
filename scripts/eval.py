@@ -5,11 +5,14 @@ import sys
 import shlex
 import json
 
+import numpy as np
+
+
 
 def run_eval(ckpt: str):
     ckpt_name = os.path.basename(ckpt)
     dp_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "diffusion_policy"))
-    output_dir = os.path.join(os.path.dirname(ckpt), "evals", ckpt_name.removesuffix(".ckpt"))
+    output_dir = os.path.join(os.path.dirname(ckpt), "evals_coverage", ckpt_name.removesuffix(".ckpt"))
     cmd = f"python {dp_dir}/eval.py --checkpoint {ckpt} -o {output_dir}"
     if not os.path.exists(output_dir):
         try:
@@ -20,10 +23,12 @@ def run_eval(ckpt: str):
 
     with open(os.path.join(output_dir, "eval_log.json"), "r") as f:
         results = json.load(f)
-        mean_score = results["test/mean_score"]
-        success_rate = sum(float(results[f"test/sim_max_reward_1000{i:02}"]) >= 0.95 for i in range(50)) / 50
+        coverages = np.array([float(results[f"test/sim_max_reward_1000{i:02}"]) for i in range(50)])
+        mean_coverage = results["test/mean_score"]
+        mean_reward = np.clip(coverages / 0.95, 0, 1).mean()
+        success_rate = (coverages >= 0.95).mean()
 
-    return mean_score, success_rate
+    return mean_coverage, mean_reward, success_rate
 
 
 def main():
@@ -32,6 +37,7 @@ def main():
     args = parser.parse_args()
 
     ckpt_dir = os.path.join(args.exp, "checkpoints")
+    total_mean_coverage = 0
     total_mean_score = 0
     total_success_rate = 0
     num_exps = 0
@@ -39,15 +45,17 @@ def main():
         if not ckpt_name.endswith(".ckpt"):
             continue
         ckpt = os.path.join(ckpt_dir, ckpt_name)
-        mean_score, success_rate = run_eval(ckpt)
-        total_mean_score += mean_score
+        mean_coverage, mean_reward, success_rate = run_eval(ckpt)
+        total_mean_coverage += mean_coverage
+        total_mean_score += mean_reward
         total_success_rate += success_rate
         num_exps += 1
 
+    avg_mean_coverage = total_mean_coverage / num_exps
     avg_mean_score = total_mean_score / num_exps
     avg_success_rate = total_success_rate / num_exps
 
-    print(f"{avg_mean_score=:.4f}, {avg_success_rate=:.4f}")
+    print(f"{avg_mean_coverage=:.4f}, {avg_mean_score=:.4f}, {avg_success_rate=:.4f}")
 
 
 if __name__ == "__main__":

@@ -70,7 +70,7 @@ nav:
   - Experiments:
     - experiments/setup.md
     - experiments/data_analysis.ipynb
-    - Results & Analysis: experiments/results.md
+    - experiments/evaluation.md
   - Logs:
     - logs/index.md
 
